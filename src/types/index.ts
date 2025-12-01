@@ -1,4 +1,3 @@
-// src/types/index.ts - NUEVO CONTENIDO
 export interface Manga {
   id: string;
   title: string;
@@ -12,13 +11,14 @@ export interface Manga {
   year?: number;
   score?: number;
   volumes?: number;
-  // Propiedades adicionales para compatibilidad
   genre?: string[];
   author?: string;
   rating?: number;
   views?: number;
   createdAt?: Date;
 }
+
+
 
 export interface MangaResponse {
   data: Manga[];
@@ -28,5 +28,4 @@ export interface MangaResponse {
 
 export type MangaStatus = 'completed' | 'ongoing' | 'hiatus' | 'cancelled';
 
-// Exportar otros tipos que necesites
-export * from './anime';
+

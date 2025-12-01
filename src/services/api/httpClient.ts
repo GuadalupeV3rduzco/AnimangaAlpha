@@ -1,4 +1,3 @@
-// src/services/api/httpClient.ts
 import { API_CONFIG } from './config';
 
 export class HttpClient {

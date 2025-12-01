@@ -27,9 +27,8 @@ export default function Login() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password)
-      // Navigation is handled by the AuthContext
     } catch (err: any) {
-      setError(err.message || "Failed to sign in")
+      setError( "Incorrect email or password")
     } finally {
       setLoading(false)
     }
@@ -40,7 +39,7 @@ export default function Login() {
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to continue watching</Text>
+          <Text style={styles.subtitle}>Sign in to continue</Text>
         </View>
 
         <View style={styles.form}>
@@ -91,22 +90,28 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 32,
     alignItems: "center",
+    width: "100%", 
   },
   title: {
     fontSize: 28,
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 8,
+    textAlign: "center", 
+    width: "100%", 
   },
   subtitle: {
     fontSize: 16,
     color: "#aaa",
+    textAlign: "center", 
+    width: "100%", 
   },
   form: {
     width: "100%",
   },
   button: {
     marginTop: 16,
+    backgroundColor: "#2136f4ff",
   },
   error: {
     color: "#ff4444",
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
     color: "#aaa",
   },
   link: {
-    color: "#F47521",
+    color: "#005a1bff",
     fontWeight: "600",
   },
 })

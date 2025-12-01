@@ -1,4 +1,3 @@
-// src/types/anime.ts
 export interface Anime {
   id: string;
   title: string;
@@ -23,8 +22,6 @@ export interface AnimeResponse {
   error?: string;
 }
 
-// Estados posibles para anime
 export type AnimeStatus = 'completed' | 'ongoing' | 'upcoming' | 'cancelled';
 
-// Tipos de anime
 export type AnimeType = 'TV' | 'Movie' | 'OVA' | 'ONA' | 'Special';

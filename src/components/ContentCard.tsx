@@ -9,27 +9,36 @@ interface ContentCardProps {
   style?: ViewStyle
 }
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * A component that displays a content item (video or manga) with a cover image,
- * title, and number of episodes or chapters.
- * 
- * @param {Video | Manga} item - The content item to display.
- * @param {"video" | "manga"} type - The type of the content item.
- * @param {ViewStyle} [style] - The style of the component.
- * 
- * @returns {JSX.Element} A JSX element representing the content item.
- */
-/*******  460fae5e-9e7a-40dd-90dc-35c18a20a999  *******/
 export default function ContentCard({ item, type, style }: ContentCardProps) {
-  const href = (type === "video" ? `/player/${item.id}` : `/manga/${item.id}`) as any
-  const imageUrl = type === "video" ? (item as Video).thumbnailUrl : (item as Manga).coverUrl
+  const getHref = () => {
+    if (type === "video") {
+      const videoItem = item as Video;
+      return `/player/${videoItem.id}` as any;
+    } else {
+      return `/manga/${item.id}` as any;
+    }
+  }
+
+  const href = getHref();
+  const imageUrl = type === "video" ? (item as Video).thumbnailUrl : (item as Manga).coverUrl;
+
+
+  const getSubtitleText = () => {
+    if (type === "video") {
+      const videoItem = item as Video;
+      return `${videoItem.episodes || 0} Episodios`;
+    } else {
+      const mangaItem = item as Manga;
+      return `${mangaItem.chapters || 0} Capítulos`;
+    }
+  };
 
   return (
     <Link href={href} asChild>
       <TouchableOpacity style={StyleSheet.flatten([styles.container, style])} activeOpacity={0.7}>
         <View style={styles.imageContainer}>
           <Image source={{ uri: imageUrl }} style={styles.image} contentFit="cover" transition={200} />
+
           {type === "video" && (
             <View style={styles.typeBadge}>
               <Text style={styles.typeText}>ANIME</Text>
@@ -40,15 +49,16 @@ export default function ContentCard({ item, type, style }: ContentCardProps) {
               <Text style={styles.typeText}>MANGA</Text>
             </View>
           )}
+
+
         </View>
+
         <View style={styles.info}>
           <Text style={styles.title} numberOfLines={1}>
             {item.title}
           </Text>
           <Text style={styles.subtitle} numberOfLines={1}>
-            {type === "video"
-              ? `${(item as Video).episodes?.length || 0} Episodes`
-              : `${(item as Manga).chapters || 0} Chapters`} {/* ✅ CORREGIDO */}
+            {getSubtitleText()}
           </Text>
         </View>
       </TouchableOpacity>
@@ -91,17 +101,31 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 8,
     right: 8,
-    backgroundColor: "rgba(244, 117, 33, 0.9)",
+    backgroundColor: "rgba(64, 141, 255, 0.9)",
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   mangaBadge: {
-    backgroundColor: "rgba(0, 174, 239, 0.9)",
+    backgroundColor: "rgba(36, 0, 239, 0.9)",
   },
   typeText: {
     color: "#fff",
     fontSize: 10,
+    fontWeight: "bold",
+  },
+  localBadge: {
+    position: "absolute",
+    top: 8,
+    left: 8,
+    backgroundColor: "rgba(34, 197, 94, 0.9)",
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  localBadgeText: {
+    color: "#fff",
+    fontSize: 8,
     fontWeight: "bold",
   },
 })

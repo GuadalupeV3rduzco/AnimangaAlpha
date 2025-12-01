@@ -1,4 +1,3 @@
-// src/services/api/config.ts
 export const ANIME_APIS = {
   JIKAN: {
     name: "Jikan REST",
@@ -35,19 +34,16 @@ export const MANGA_APIS = {
   }
 };
 
-// ✅ AGREGAR: Configuración de prioridad
 export const API_PRIORITY = {
   anime: ['JIKAN', 'ANILIST', 'KITSU'] as const,
   manga: ['MANGADEX', 'COMICK'] as const
 };
 
-// ✅ AGREGAR: Timeouts y retry config
 export const API_CONFIG = {
-  timeout: 10000, // 10 segundos
+  timeout: 10000, 
   maxRetries: 2,
-  retryDelay: 1000 // 1 segundo
+  retryDelay: 1000 
 };
 
-// ✅ AGREGAR: Tipos para TypeScript
 export type AnimeApiKey = keyof typeof ANIME_APIS;
 export type MangaApiKey = keyof typeof MANGA_APIS;

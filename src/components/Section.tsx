@@ -1,15 +1,15 @@
-import { View, Text, StyleSheet, FlatList } from "react-native"
-import type { Video, Manga } from "@/src/types"
+import type { Manga } from "@/src/types"
+import { FlatList, StyleSheet, Text, View } from "react-native"
 import ContentCard from "./ContentCard"
 
 interface SectionProps {
   title: string
-  data: (Video | Manga)[]
-  type: "video" | "manga"
+  data: Manga[]
+  type: "manga"
 }
 
 export default function Section({ title, data, type }: SectionProps) {
-  if (!data.length) return null
+  if (!data || !data.length) return null
 
   return (
     <View style={styles.container}>

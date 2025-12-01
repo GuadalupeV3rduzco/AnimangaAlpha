@@ -1,4 +1,4 @@
-import { View, ActivityIndicator, StyleSheet } from "react-native"
+import { ActivityIndicator, StyleSheet, View } from "react-native"
 
 export default function LoadingScreen() {
   return (
@@ -13,6 +13,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#121212", // Dark mode bg
+    backgroundColor: "#121212", 
   },
 })

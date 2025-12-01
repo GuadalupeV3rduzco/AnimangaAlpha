@@ -1,4 +1,3 @@
-// src/types/manga.ts
 export interface Manga {
   id: string;
   title: string;

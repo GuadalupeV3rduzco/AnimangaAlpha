@@ -1,25 +1,31 @@
 "use client"
 
-import { useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native"
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import Button from "@/src/components/Button"
+import Input from "@/src/components/Input"
 import { auth, db } from "@/src/services/firebase"
 import { Link } from "expo-router"
-import Input from "@/src/components/Input"
-import Button from "@/src/components/Button"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
 import { doc, setDoc } from "firebase/firestore"
+import { useState } from "react"
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export default function Register() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
   const handleRegister = async () => {
-    if (!name || !email || !password) {
-      setError("Please fill in all fields")
+    if (!name || !email || !password || !confirmPassword) {
+      setError("Please fill in all fields.")
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.")
       return
     }
 
@@ -27,16 +33,13 @@ export default function Register() {
     setError("")
 
     try {
-      // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user
 
-      // Update profile with name
       await updateProfile(user, {
         displayName: name,
       })
 
-      // Create user document in Firestore
       await setDoc(doc(db, "users", user.uid), {
         id: user.uid,
         email: user.email,
@@ -48,9 +51,9 @@ export default function Register() {
         createdAt: new Date(),
       })
 
-      // Navigation is handled by the AuthContext
     } catch (err: any) {
-      setError(err.message || "Failed to register")
+      const errorMessage = err.message.includes('auth/') ? err.message.split('auth/')[1].replace(/[-]/g, ' ') : "Failed to register";
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -80,6 +83,13 @@ export default function Register() {
             onChangeText={setPassword}
             secureTextEntry
             placeholder="Choose a password"
+          />
+          <Input
+            label="Confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+            placeholder="Re-enter password"
           />
 
           {error ? <Text style={styles.error}>{error}</Text> : null}
@@ -129,6 +139,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
+    backgroundColor: "#2136f4ff",
+
   },
   error: {
     color: "#ff4444",
@@ -144,7 +156,7 @@ const styles = StyleSheet.create({
     color: "#aaa",
   },
   link: {
-    color: "#F47521",
+    color: "#005a1bff",
     fontWeight: "600",
   },
 })
