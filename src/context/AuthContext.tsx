@@ -48,7 +48,6 @@ export function useAuth() {
     return context
 }
 
-// SOLUCIÓN: Convertir en un hook personalizado válido
 function useProtectedRoute(user: User | null, isLoading: boolean) {
     const segments = useSegments()
     const router = useRouter()
@@ -71,27 +70,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
-    // Llamar a useProtectedRoute directamente aquí (no dentro de useEffect)
     useProtectedRoute(user, isLoading)
+useEffect(() => {
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setUser(user)
-            setIsLoading(false)
-        })
-        return () => unsubscribe()
-    }, [])
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+        setUser(firebaseUser)
+        setIsLoading(false)
+    })
+    
+    return () => {
+        unsubscribe();
+    }
+}, [])
 
     const actualSignOutCore = useCallback(async () => {
         try {
             await firebaseSignOut(auth);
         } catch (error: any) {
-            console.error("ERROR AL CERRAR SESIÓN:", error);
-            Alert.alert("C", error.message || "No se pudo cerrar la sesión. Intenta de nuevo.");
+            Alert.alert("C", error.message || "Could not sign out. Please try again.");
         }
     }, []);
 
-    const signOut = useCallback(() => {
+  const signOut = useCallback(() => {
+    if (Platform.OS === 'web') {
+        const confirmed = window.confirm("¿Are you sure you want to sign out?");
+        if (confirmed) {
+            actualSignOutCore();
+        }
+    } else {
         Alert.alert(
             "Sign Out",
             "¿Are you sure you want to log out?",
@@ -101,38 +107,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             ],
             { cancelable: true }
         );
-    }, [actualSignOutCore]);
+    }
+}, [actualSignOutCore]);
 
-    const updateProfileInfo = useCallback(async (displayName: string, photoURI: string | null) => {
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
-            throw new Error("User not signed in.");
+  const updateProfileInfo = useCallback(async (displayName: string, photoURI: string | null) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+        throw new Error("User not signed in.");
+    }
+
+    let newPhotoURL = currentUser.photoURL;
+
+    if (photoURI && Platform.OS !== 'web') {
+        try {
+            newPhotoURL = await saveImageLocally(photoURI, currentUser.uid);
+        } catch (error) {
+            Alert.alert("Error de Archivo", "No se pudo guardar la foto localmente.");
         }
+    } else if (photoURI && Platform.OS === 'web') {
+        Alert.alert("Web", "La foto de perfil solo se puede guardar en iOS/Android. El nombre se actualizará.");
+    }
 
-        let newPhotoURL = currentUser.photoURL;
+    await updateProfile(currentUser, {
+        displayName: displayName,
+        photoURL: newPhotoURL
+    });
 
-        if (photoURI && Platform.OS !== 'web') {
-            try {
-                newPhotoURL = await saveImageLocally(photoURI, currentUser.uid);
-            } catch (error) {
-                Alert.alert("Error de Archivo", "No se pudo guardar la foto localmente.");
-                console.error("Fallo al guardar imagen en el sistema de archivos nativo:", error);
-            }
-        } else if (photoURI && Platform.OS === 'web') {
-            Alert.alert("Web", "La foto de perfil solo se puede guardar en iOS/Android. El nombre se actualizará.");
-        }
 
-        await updateProfile(currentUser, {
-            displayName: displayName,
-            photoURL: newPhotoURL
-        });
-
-        setUser({
-            ...currentUser,
-            displayName: displayName,
-            photoURL: newPhotoURL
-        });
-    }, []);
+    await currentUser.reload();    
+}, []);
 
     const contextValue = useMemo(() => ({
         user,

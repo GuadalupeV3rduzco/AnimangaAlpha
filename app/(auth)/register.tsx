@@ -68,7 +68,7 @@ export default function Register() {
         </View>
 
         <View style={styles.form}>
-          <Input label="Name" value={name} onChangeText={setName} placeholder="Enter your name" />
+          <Input label="Name" value={name} onChangeText={setName} placeholder="Enter your username" />
           <Input
             label="Email"
             value={email}
@@ -89,7 +89,7 @@ export default function Register() {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry
-            placeholder="Re-enter password"
+            placeholder="Confirm password"
           />
 
           {error ? <Text style={styles.error}>{error}</Text> : null}
