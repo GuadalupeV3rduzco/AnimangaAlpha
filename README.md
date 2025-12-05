@@ -1,28 +1,36 @@
-Animanga Plus
-##
-Es una aplicación móvil para poder leer manga. Este repositorio contiene el Front y parte del Backend, Construido con React Native y Expo go
-##
-Funcionalidades Principales
-Iniciar sesión 
-Registrarse
-Leer manga
-Descargar Manga
-Buscar Manga
-Agregar a favoritos
-Modificar imagen de perfil
-Modificar nombre de usuario
-Ver historial de mangas leídos
-Scroll para leer las páginas de los capítulos
-Número de páginas para ir a la página indicada
+# 📱 Animanga Plus
 
-##
-Características
-Sistema de autentificación
-Sistema de lector de manga
-Scroll de páginas
+**Animanga Plus** es una aplicación móvil para leer manga.  
+Este repositorio contiene el **Frontend** y parte del **Backend**, construido con **React Native** y **Expo Go**.
 
-##
-Tecnologías 
-React Native
-Expo Go
-TypeScript
+---
+
+## 🚀 Funcionalidades Principales
+
+- 🔐 Iniciar sesión  
+- 📝 Registrarse  
+- 📖 Leer manga  
+- ⬇️ Descargar manga  
+- 🔍 Buscar manga  
+- ⭐ Agregar a favoritos  
+- 🖼️ Modificar imagen de perfil  
+- ✏️ Modificar nombre de usuario  
+- 📚 Ver historial de mangas leídos  
+- 📜 Scroll para leer páginas de capítulos  
+- 🔢 Ir a una página específica  
+
+---
+
+## 🧩 Características
+
+- 🔑 Sistema de autenticación  
+- 📚 Lector de manga  
+- 📜 Scroll de páginas fluido  
+
+---
+
+## 🛠️ Tecnologías
+
+- ⚛️ React Native  
+- 📦 Expo Go  
+- 🟦 TypeScript  
